@@ -2,6 +2,7 @@
 package lesson3.task1
 
 import kotlin.math.sqrt
+import kotlin.math.pow
 
 /**
  * Пример
@@ -74,7 +75,11 @@ fun digitNumber(n: Int): Int = TODO()
  * Найти число Фибоначчи из ряда 1, 1, 2, 3, 5, 8, 13, 21, ... с номером n.
  * Ряд Фибоначчи определён следующим образом: fib(1) = 1, fib(2) = 1, fib(n+2) = fib(n) + fib(n+1)
  */
-fun fib(n: Int): Int = TODO()
+fun fib(n: Int): Int {
+    if (n == 1 || n == 2) return 1
+    return fib(n-1) + fib(n-2)
+
+}
 
 /**
  * Простая
@@ -191,7 +196,33 @@ fun hasDifferentDigits(n: Int): Boolean = TODO()
  *
  * Использовать операции со строками в этой задаче запрещается.
  */
-fun squareSequenceDigit(n: Int): Int = TODO()
+
+
+
+fun squareSequenceDigit(n: Int): Int {
+    var result = 0
+    var gCount = 0
+    var lCount = 0
+    var sqN = 0
+
+    for (i in 1..n) {
+        sqN = i*i
+        lCount = lNum(sqN)
+        gCount += lCount
+        if (gCount>=n) {
+            if (gCount-n <= lCount) {
+                result = targetNum(n - (gCount - lCount),sqN)
+                return result
+            } else{
+                result = targetNum(gCount - lCount - n + 1, (i-1)*(i-1))
+                return result
+            }
+        }
+    }
+    return 0
+
+
+}
 
 /**
  * Сложная
@@ -202,4 +233,43 @@ fun squareSequenceDigit(n: Int): Int = TODO()
  *
  * Использовать операции со строками в этой задаче запрещается.
  */
-fun fibSequenceDigit(n: Int): Int = TODO()
+fun lNum (n:Int):Int{
+    var newN = n
+    var result = 0
+    do {
+        newN /= 10
+        result++
+    }while (newN != 0)
+    return result
+}
+
+fun targetNum (target:Int, n:Int):Int{
+    var l = 0
+    var p = 0
+    l = lNum(n)
+    p = l-target
+    return (n / 10.toDouble().pow(p).toInt() - n / 10.toDouble().pow(p+1).toInt()*10)
+}
+
+fun fibSequenceDigit(n: Int): Int {
+    var result = 0
+    var gCount = 0
+    var lCount = 0
+    var fibN = 0
+
+    for (i in 1..n) {
+        fibN = fib(i)
+        lCount = lNum(fibN)
+        gCount += lCount
+        if (gCount>=n) {
+            if (gCount-n <= lCount) {
+                result = targetNum(n - (gCount - lCount),fibN)
+                return result
+            } else{
+                result = targetNum(gCount - lCount - n + 1, fib(i-1))
+                return result
+            }
+        }
+    }
+    return 0
+}

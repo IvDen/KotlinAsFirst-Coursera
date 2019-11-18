@@ -239,4 +239,117 @@ fun roman(n: Int): String = TODO()
  * Например, 375 = "триста семьдесят пять",
  * 23964 = "двадцать три тысячи девятьсот шестьдесят четыре"
  */
-fun russian(n: Int): String = TODO()
+fun russian(n: Int): String {
+    var list = mutableListOf<String>();
+    var splDigit:List<Int> = splitDigit(n);
+    var bit:Int = 1;
+    splDigit.forEach {
+        if (it != 0) {
+            list.add(toNumeral(it,bit))
+        } else if (bit == 4) list.add(toNumeral(it,bit))
+        bit++;
+
+
+    }
+
+
+    return  list.asReversed().joinToString(" ");
+}
+
+fun splitDigit (n:Int):List<Int> {
+    var result = mutableListOf<Int>();
+    var newN = n
+    var element:Int;
+    var x:Int = 10;
+    var bit: Int = 1;
+    do {
+        element = if (newN % (x * 10) in 10..19){
+            (newN % x) + 10;
+            //newN -= 10;
+        } else newN % x;
+        result.add(element);
+        newN -= element;
+        bit++;
+        x *= 10;
+        if (bit == 4) {
+            newN /= 1000;
+            x /= 1000;
+        };
+    }while (newN != 0)
+    return result;//.asReversed();////
+}
+
+
+
+fun toNumeral (n:Int, bit:Int):String{
+    val k = "тысяч";
+    val part1:String = when{
+        n == 1 && bit == 1 -> "один";
+        n == 1 && bit == 4 -> "одна";
+        n == 2 && bit == 1 -> "два";
+        n == 2 && bit == 4 -> "две";
+        n == 3 -> "три";
+        n == 4 -> "четыре";
+        n == 5 -> "пять";
+        n == 6 -> "шесть";
+        n == 7 -> "семь";
+        n == 8 -> "восемь";
+        n == 9 -> "девять";
+        n == 10 -> "десять";
+        n == 11 -> "одиннадцать";
+        n == 12 -> "двенадцать";
+        n == 13 -> "тринадцать";
+        n == 14 -> "четырнадцать";
+        n == 15 -> "пятнадцать";
+        n == 16 -> "шестнадцать";
+        n == 17 -> "семнадцать";
+        n == 18 -> "восемнадцать";
+        n == 19 -> "девятнадцать";
+        n == 20 -> "двадцать";
+        n == 30 -> "тридцать";
+        n == 40 -> "сорок";
+        n == 50 -> "пятьдесят";
+        n == 60 -> "шестьдесят";
+        n == 70 -> "семьдесят";
+        n == 80 -> "восемьдесят";
+        n == 90 -> "девяносто";
+        n == 100 -> "сто";
+        n == 200 -> "двести";
+        n == 300 -> "триста";
+        n == 400 -> "четыреста";
+        n == 500 -> "пятьсот";
+        n == 600 -> "шестьсот";
+        n == 700 -> "семьсот";
+        n == 800 -> "восемьсот";
+        n == 900 -> "девятьсот";
+        else -> "";
+    };
+
+    val part2:String;
+    return if (bit == 4 && n == 0) {
+        part2 = when (n) {
+            1 -> k + "а"
+            in 2..4 -> k + "и"
+            else -> k
+        }
+        part2
+    } else if(bit == 4) {
+        part2 = when (n) {
+            1 -> k + "а"
+            in 2..4 -> k + "и"
+            else -> k
+        }
+        "$part1 $part2"
+    } else part1
+
+}
+
+fun lNum (n:Int):Int{
+    var newN = n
+    var result = 0
+    do {
+        newN /= 10
+        result++
+    }while (newN != 0)
+    return result
+}

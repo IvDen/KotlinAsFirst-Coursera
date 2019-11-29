@@ -278,27 +278,11 @@ fun findSumOfTwo(list: List<Int>, number: Int): Pair<Int, Int> = TODO()
  *   ) -> emptySet()
  */
 fun bagPacking(treasures: Map<String, Pair<Int, Int>>, capacity: Int): Set<String> {
-    var filteredTreasures = treasures.filter { it.value.first <= capacity || it.value.second == 0} //отбросить слишком большие или с нулевой ценностью
-    var  paretoMap = mapOf<String, Pair<Int, Int>>();
-    var result = arrayOf<Set<String>>();
-    var count:Int = 0;
-    for (itemTr in filteredTreasures){
-        var news = mutableMapOf<String, Pair<Int, Int>>();
-        for (itemPar in paretoMap){
-            if (itemPar.value.first + itemTr.value.first <= capacity){
-                news.put(itemTr.key+itemPar.key, Pair(itemPar.value.first + itemTr.value.first,itemPar.value.second + itemTr.value.second));
-            }
-        }
-        paretoMap = paretoMap + news;
-    }
-    return emptySet();
-}
-
-fun maxVal(treasures: Map<String, Pair<Int, Int>>, capacity: Int):Int {
     var value: Array<Array<Int>> = Array(treasures.size+1) { Array(capacity+1) { -1 } };
     var weight: Array<Int> = Array(treasures.size) { 0 };
     var valueAr: Array<Int> = Array(treasures.size) { 0 };
     var keyAr: Array<String> = Array(treasures.size) {""};
+    var resSet = emptySet<String>().toMutableSet();
     var counter: Int = 0;
     for (item in treasures) {
         weight[counter] = item.value.first;
@@ -307,39 +291,122 @@ fun maxVal(treasures: Map<String, Pair<Int, Int>>, capacity: Int):Int {
         counter++;
     }
     var nodes = arrayListOf<Int>();
-    var nodesToDel = arrayListOf<Int>();
-    var deletedNodes = arrayListOf<Int>();
+    var nodesWithRBranches = arrayListOf<Int>();
 
-
-    fun testMaxVal(i: Int, j: Int): Int {
+    println(treasures)
+    fun maxValue(i: Int, j: Int): Int {
 
         if (j <= 0 || i == 0) {
-            //if(j <= 0 && i != 0) testList.add(i);
-
             return 0;
         }
 
-        if (value[i - 1][j] == -1) {
-            value[i - 1][j] = testMaxVal(i - 1, j)
+        //if (value[i - 1][j] == -1) {
+        if (true) { //если вернуть базовое условие, то не заносит ноду в массив
+            value[i - 1][j] = maxValue(i - 1, j)
         }
-        if (i==9) {
-        }
-        nodes.add(i)
-        nodesToDel.add(0)
         if (weight[i-1] > j) {
             value[i][j] = value[i - 1][j]
+            nodes.add(i)
+            nodesWithRBranches.add(i)
         } else {
             if (value[i - 1][j - weight[i-1]] == -1) {
+                //if (true) {
+                value[i - 1][j - weight[i-1]] = maxValue(i - 1, j - weight[i-1])
+            }
+
+            value[i][j] = max(value[i - 1][j], value[i - 1][j - weight[i-1]] + valueAr[i-1])
+
+
+            nodes.add(i)
+            nodesWithRBranches.add(0)
+
+            if (value[i - 1][j] < (value[i - 1][j - weight[i-1]] + valueAr[i-1])){
+                if (i!=1) branchChecker(i,nodes,0);
+            } else{
+                if (i!=1) branchChecker(i,nodes,1);
+                nodesWithRBranches[nodesWithRBranches.lastIndex] = i
+
+            }
+        }
+
+        return value[i][j];
+    }
+
+    var maxValofBag = maxValue(treasures.size,capacity)
+
+
+    println("res: " + nodes)
+    println("ind: " + nodesWithRBranches)
+
+
+    for (item in 0 until nodes.size){
+        if (nodesWithRBranches[item] == nodes[item]) nodes[item] = 0
+    }
+    nodes.removeAll(listOf(0));
+
+    println("res_clear: " + nodes)
+
+    println("res $maxValofBag")
+
+    for (item in nodes){
+        resSet.add(keyAr[item-1])
+    }
+    println(resSet);
+    return resSet
+}
+
+fun maxVal(treasures: Map<String, Pair<Int, Int>>, capacity: Int):Int {
+    var value: Array<Array<Int>> = Array(treasures.size+1) { Array(capacity+1) { -1 } };
+    var weight: Array<Int> = Array(treasures.size) { 0 };
+    var valueAr: Array<Int> = Array(treasures.size) { 0 };
+    var keyAr: Array<String> = Array(treasures.size) {""};
+    var resSet = emptySet<String>().toMutableSet();
+    var counter: Int = 0;
+    for (item in treasures) {
+        weight[counter] = item.value.first;
+        valueAr[counter] = item.value.second;
+        keyAr[counter] = item.key;
+        counter++;
+    }
+    var nodes = arrayListOf<Int>();
+    var nodesWithRBranches = arrayListOf<Int>();
+    var nodesW = arrayListOf<Int>();
+
+
+    println(treasures)
+    fun testMaxVal(i: Int, j: Int): Int {
+
+        if (j <= 0 || i == 0) {
+            return 0;
+        }
+
+        //if (value[i - 1][j] == -1) {
+        if (true) { //если вернуть базовое условие, то не заносит ноду в массив
+            value[i - 1][j] = testMaxVal(i - 1, j)
+        }
+        if (weight[i-1] > j) {
+            value[i][j] = value[i - 1][j]
+            nodes.add(i)
+            nodesWithRBranches.add(i)
+            nodesW.add(j)
+        } else {
+            if (value[i - 1][j - weight[i-1]] == -1) {
+            //if (true) {
                 value[i - 1][j - weight[i-1]] = testMaxVal(i - 1, j - weight[i-1])
             }
+
             value[i][j] = max(value[i - 1][j], value[i - 1][j - weight[i-1]] + valueAr[i-1])
-            //nodes.add(i)
-            //nodesToDel.add(0)
+
+
+            nodes.add(i)
+            nodesWithRBranches.add(0)
+            nodesW.add(j)
+
             if (value[i - 1][j] < (value[i - 1][j - weight[i-1]] + valueAr[i-1])){
-                //if (i!=1) leftBranchCutter(i,nodes);
+               if (i!=1) branchChecker(i,nodes,0);
             } else{
-                nodesToDel[nodesToDel.size-1] = i
-                deletedNodes.add(i)
+                if (i!=1) branchChecker(i,nodes,1);
+                nodesWithRBranches[nodesWithRBranches.lastIndex] = i
 
             }
         }
@@ -349,89 +416,58 @@ fun maxVal(treasures: Map<String, Pair<Int, Int>>, capacity: Int):Int {
 
     var result = testMaxVal(treasures.size,capacity)
 
+
+    println("res: " + nodes)
+    println("ind: " + nodesWithRBranches)
+    println("W: " + nodesW)
+
+
     for (item in 0 until nodes.size){
-        //if (nodesToDel[item] != 0) nodes[item] = 0
+       if (nodesWithRBranches[item] == nodes[item]) nodes[item] = 0
     }
     nodes.removeAll(listOf(0));
 
-    println("res: " + nodes)
-    println("del: " + deletedNodes)
-    println("ind: " + nodesToDel)
+    println("res_clear: " + nodes)
+    //println("del: " + deletedNodes)
 
     println("res $result")
-    println();
+
+    for (item in nodes){
+      resSet.add(keyAr[item-1])
+    }
+    println(resSet);
     return result
 }
 
-fun leftBranchCutter(element:Int, source:ArrayList<Int>) {
+fun branchChecker (element:Int, source:ArrayList<Int>,key:Int) {
     var arrMinusLast:List<Int> = source.dropLast(1);
     var pointer = 0;
     var leftElder = 0
     var arrMinusTail:List<Int> = emptyList();
-    //println(source)
-   //println(arrMinusLast)
-    //println(arrMinusTail)
     if (arrMinusLast.contains(element)){
         arrMinusTail = arrMinusLast.dropLastWhile {it < element}; //в кейсе когда мы запускаем из узла, который на данный момент общий корень то обнуляет массив
         leftElder = arrMinusTail.size-1
         if (leftElder != -1) pointer = leftElder+1
-
     }
-   // println(element)
-    //println(leftElder)
-    //println(pointer)
-    exit@ while (source[pointer] <= element-1){
-        var buffer = source[pointer]
-        source[pointer] = 0
-        if (buffer == element-1) break@exit
-        pointer++
-    }
-
-    println(source)
-    println()
-
-
-
-
-    /*
-    for (i in leftElder+1 until source.size){
-        if (i >= key){
-
-            break;
+    var childsOfElem:List<Int> = source.subList(pointer,source.size-1)
+    if (childsOfElem.filter { it == element-1 }.size == 1 || key == 0){
+        exit@ while (source[pointer] <= element-1){
+            var buffer = source[pointer]
+            source[pointer] = 0
+            if (buffer == element-1) break@exit
+            pointer++
         }
-            source[i] = 0;
-    }
 
-    var lParent = source.lastIndexOf(element+1)
-    var lSibling = arrMinusLast.lastIndexOf(element)
-    var elIndex = source.lastIndexOf(element)
-    if (lParent == -1){
-        for (i in lSibling+1 until elIndex){
-            source[i] = 0;
-        }
     } else{
-        for (i in lParent+1 until elIndex){
-            source[i] = 0;
-
+        pointer = source.size-2;
+        exit@ while (source[pointer] <= element-1){
+            var buffer = source[pointer]
+            source[pointer] = 0
+            pointer--
+            if (source[pointer] == element-1) break@exit
         }
     }
 
-    /*
-    var parent = source.lastIndexOf(element+1)
-    var child = source.lastIndexOf(element)
-
-    if (parent==-1) parent=child
-
-    if (parent < child){
-        //range  = source.indexOf(element-1);
-        for (i in parent+1 until child){
-            source[i] = 0;
-        }
-    }else{
-        for (i in 0 .. source.indexOf(element-1)){
-            source[i] = 0;
-        }
-    }*/
-*/
 }
+
 

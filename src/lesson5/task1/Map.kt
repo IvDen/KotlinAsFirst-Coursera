@@ -278,11 +278,10 @@ fun findSumOfTwo(list: List<Int>, number: Int): Pair<Int, Int> = TODO()
  *   ) -> emptySet()
  */
 fun bagPacking(treasures: Map<String, Pair<Int, Int>>, capacity: Int): Set<String> {
-    var value: Array<Array<Int>> = Array(treasures.size+1) { Array(capacity+1) { -1 } };
+    var value: Array<Array<Pair<Int,Set<String>>>> = Array(treasures.size+1) { Array(capacity+1) { Pair(-1,setOf("0")) } };
     var weight: Array<Int> = Array(treasures.size) { 0 };
     var valueAr: Array<Int> = Array(treasures.size) { 0 };
     var keyAr: Array<String> = Array(treasures.size) {""};
-    var resSet = emptySet<String>().toMutableSet();
     var counter: Int = 0;
     for (item in treasures) {
         weight[counter] = item.value.first;
@@ -290,70 +289,37 @@ fun bagPacking(treasures: Map<String, Pair<Int, Int>>, capacity: Int): Set<Strin
         keyAr[counter] = item.key;
         counter++;
     }
-    var nodes = arrayListOf<Int>();
-    var nodesWithRBranches = arrayListOf<Int>();
-
-
     println(treasures)
-    fun maxValue(i: Int, j: Int): Int {
+
+    fun testMaxVal(i: Int, j: Int): Pair<Int,Set<String>> {
 
         if (j <= 0 || i == 0) {
-            return 0;
+            return 0 to setOf("")
         }
-
-        //if (value[i - 1][j] == -1) {
-        if (true) { //если вернуть базовое условие, то не заносит ноду в массив
-            value[i - 1][j] = maxValue(i - 1, j)
+        if (value[i - 1][j].first == -1) {
+            value[i - 1][j] = testMaxVal(i - 1, j)
         }
         if (weight[i-1] > j) {
             value[i][j] = value[i - 1][j]
-            nodes.add(i)
-            nodesWithRBranches.add(i)
         } else {
-            if (value[i - 1][j - weight[i-1]] == -1) {
-                //if (true) {
-                value[i - 1][j - weight[i-1]] = maxValue(i - 1, j - weight[i-1])
+            if (value[i - 1][j - weight[i-1]].first == -1) {
+                value[i - 1][j - weight[i-1]] = testMaxVal(i - 1, j - weight[i-1])
             }
-
-            value[i][j] = max(value[i - 1][j], value[i - 1][j - weight[i-1]] + valueAr[i-1])
-
-
-            nodes.add(i)
-            nodesWithRBranches.add(0)
-
-            if (value[i - 1][j] < (value[i - 1][j - weight[i-1]] + valueAr[i-1])){
-                if (i!=1) branchChecker(i,nodes,0);
+            if (value[i - 1][j].first > value[i - 1][j - weight[i-1]].first + valueAr[i-1]){
+                value[i][j] = value[i - 1][j]
             } else{
-                if (i!=1) branchChecker(i,nodes,1);
-                nodesWithRBranches[nodesWithRBranches.lastIndex] = i
-
+                value[i][j] = value[i - 1][j - weight[i-1]].first + valueAr[i-1] to value[i - 1][j - weight[i-1]].second+keyAr[i-1]
             }
         }
-
         return value[i][j];
     }
 
-    var maxValofBag = maxValue(treasures.size,capacity)
-
-
-    println("res: " + nodes)
-    println("ind: " + nodesWithRBranches)
-
-
-    for (item in 0 until nodes.size){
-        if (nodesWithRBranches[item] == nodes[item]) nodes[item] = 0
-    }
-    nodes.removeAll(listOf(0));
-
-    println("res_clear: " + nodes)
-
-    println("res $maxValofBag")
-
-    for (item in nodes){
-        resSet.add(keyAr[item-1])
-    }
-    println(resSet);
-    return resSet
+    var buffer:Pair<Int,Set<String>> = testMaxVal(treasures.size,capacity)
+    var result:MutableSet<String> = buffer.second.toMutableSet();
+    result.remove("");
+    println("res $result")
+    println()
+    return result
 }
 
 fun maxVal(treasures: Map<String, Pair<Int, Int>>, capacity: Int):Int {
@@ -381,8 +347,8 @@ fun maxVal(treasures: Map<String, Pair<Int, Int>>, capacity: Int):Int {
             return 0;
         }
 
-        //if (value[i - 1][j] == -1) {
-        if (true) { //если вернуть базовое условие, то не заносит ноду в массив
+        if (value[i - 1][j] == -1) {
+        //if (true) { //если вернуть базовое условие, то не заносит ноду в массив
             value[i - 1][j] = testMaxVal(i - 1, j)
         }
         if (weight[i-1] > j) {
@@ -439,6 +405,59 @@ fun maxVal(treasures: Map<String, Pair<Int, Int>>, capacity: Int):Int {
     println(resSet);
     return result
 }
+
+//////////////////////////////
+fun maxValReborn(treasures: Map<String, Pair<Int, Int>>, capacity: Int):Int {
+    var value: Array<Array<Pair<Int,Set<String>>>> = Array(treasures.size+1) { Array(capacity+1) { Pair(-1,setOf("0")) } };
+    var weight: Array<Int> = Array(treasures.size) { 0 };
+    var valueAr: Array<Int> = Array(treasures.size) { 0 };
+    var keyAr: Array<String> = Array(treasures.size) {""};
+    var counter: Int = 0;
+    for (item in treasures) {
+        weight[counter] = item.value.first;
+        valueAr[counter] = item.value.second;
+        keyAr[counter] = item.key;
+        counter++;
+    }
+    println(treasures)
+
+    fun testMaxVal(i: Int, j: Int): Pair<Int,Set<String>> {
+
+        if (j <= 0 || i == 0) {
+            return 0 to setOf("")
+        }
+
+        if (value[i - 1][j].first == -1) {
+            value[i - 1][j] = testMaxVal(i - 1, j)
+        }
+        if (weight[i-1] > j) {
+            value[i][j] = value[i - 1][j]
+        } else {
+            if (value[i - 1][j - weight[i-1]].first == -1) {
+                value[i - 1][j - weight[i-1]] = testMaxVal(i - 1, j - weight[i-1])
+            }
+            if (value[i - 1][j].first > value[i - 1][j - weight[i-1]].first + valueAr[i-1]){
+                value[i][j] = value[i - 1][j]
+            } else{
+                value[i][j] = value[i - 1][j - weight[i-1]].first + valueAr[i-1] to value[i - 1][j - weight[i-1]].second+keyAr[i-1]
+            }
+        }
+        return value[i][j];
+    }
+
+    var result:Pair<Int,Set<String>> = testMaxVal(treasures.size,capacity)
+    var newResult:MutableSet<String> = result.second.toMutableSet();
+    newResult.remove("");
+    newResult.isEmpty()
+    println(newResult)
+
+    println("res $result")
+    println()
+
+
+    return result.first
+}
+
 
 fun branchChecker (element:Int, source:ArrayList<Int>,key:Int) {
     var arrMinusLast:List<Int> = source.dropLast(1);

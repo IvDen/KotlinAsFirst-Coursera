@@ -2,6 +2,10 @@
 
 package lesson6.task1
 
+import java.lang.IllegalArgumentException
+import java.lang.IllegalStateException
+import java.util.regex.Pattern
+
 /**
  * Пример
  *
@@ -207,4 +211,117 @@ fun fromRoman(roman: String): Int = TODO()
  * IllegalArgumentException должен бросаться даже если ошибочная команда не была достигнута в ходе выполнения.
  *
  */
-fun computeDeviceCells(cells: Int, commands: String, limit: Int): List<Int> = TODO()
+fun computeDeviceCells(cells: Int, commands: String, limit: Int): List<Int>{
+
+    var pointer:Int = cells / 2
+    var cellsList: MutableList<Int> = List(cells){0}.toMutableList()
+    var commandList:List<String> = parceCommands(commands);
+    var index:Int = 0
+    var operationCounter:Int = 0
+    /*
+    for (item in commandList){
+        when (item){
+            "+" -> cellsList[pointer]++
+            "-" -> cellsList[pointer]--
+            ">" -> pointer++
+            "<" -> pointer--
+            "[" -> {
+                if ( cellsList[pointer] == 0) pointer = index + giveNextBrIndex(commandList.subList(index,commandList.lastIndex+1)) + 1
+            }
+            "]" -> {
+                if ( cellsList[pointer] != 0) pointer = givePrevBrIndex(commandList.subList(0,index+1)) + 1
+            }
+
+        }
+        index++
+    }
+    */
+    var i:Int = 0
+    loop@ while (i < commandList.size){
+        var currentCommand = commandList[i]
+        when (commandList[i]){
+            "+" -> cellsList[pointer]++
+            "-" -> cellsList[pointer]--
+            ">" -> {
+                pointer++
+                if (pointer > cellsList.lastIndex) throw IllegalStateException ("Out of range")
+            }
+            "<" -> {
+                pointer--
+                if (pointer < 0) throw IllegalStateException ("Out of range")
+            }
+            "[" -> {
+                if ( cellsList[pointer] == 0) {
+                    i = i + giveNextBrIndex(commandList.subList(i,commandList.lastIndex+1)) + 1
+                    operationCounter++
+                    if (operationCounter+1 > limit) break@loop
+                    continue@loop
+                }
+            }
+            "]" -> {
+                if ( cellsList[pointer] != 0) {
+                    i = givePrevBrIndex(commandList.subList(0,i+1)) + 1
+                    operationCounter++
+                    if (operationCounter+1 > limit) break@loop
+                    continue@loop
+                }
+            }
+        }
+        i++
+        operationCounter++
+        if (operationCounter+1 > limit) break@loop
+    }
+    return cellsList.toList()
+}
+
+fun givePrevBrIndex(commands: List<String>):Int {
+    var counter:Int = 0
+    var index:Int = 0
+    exit@for (i in commands.lastIndex downTo 0){
+        when (commands[i]){
+            "[" -> counter--
+            "]" -> counter++
+        }
+        if (counter == 0) {
+            index = i
+            break@exit
+        }
+    }
+    return index
+}
+fun giveNextBrIndex(commands: List<String>):Int{
+    var counter:Int = 0
+    var index:Int = 0
+    exit@for (item in commands){
+        when (item){
+            "[" -> counter++
+            "]" -> counter--
+        }
+        if (counter == 0) break@exit
+        index++
+    }
+    return index
+}
+
+fun parceCommands (commands: String):List<String>{
+
+    var result = commands.split("").toMutableList()
+    result.removeAt(0)
+    result.removeAt(result.lastIndex)
+
+    var commandTypeSet:Set<String> = setOf(">", "<", "+", "-", "[", "]", " ")
+    if (result.toSet().minus(commandTypeSet).isNotEmpty()) throw IllegalArgumentException ("Illegal command")
+    if (result.indexOf("]") < result.indexOf("[")) throw IllegalArgumentException ("Illegal command")
+    //if (result[result.lastIndex] == "]") throw IllegalArgumentException ("Illegal command") //по идее код, заверешающийся ] должен быть неправильным
+    //if (result.filter { it == "[" }.size != result.filter { it == "]" }.size) throw IllegalArgumentException ("Illegal command")
+    var counter:Int = 0
+for (item in result){
+    when (item){
+        "[" -> counter++
+        "]" -> counter--
+    }
+    if (counter < 0) throw IllegalArgumentException ("Illegal command")
+}
+    if (counter != 0) throw IllegalArgumentException ("Illegal command")
+    return result
+}

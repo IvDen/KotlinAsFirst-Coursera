@@ -1,8 +1,12 @@
-@file:Suppress("UNUSED_PARAMETER", "ConvertCallChainIntoSequence")
+//@file:Suppress("UNUSED_PARAMETER", "ConvertCallChainIntoSequence")
 
 package lesson7.task1
 
+//import lesson3.task1.lNum
+//import lesson3.task1.lNum
+//import lesson3.task1.targetNum
 import java.io.File
+import kotlin.math.pow
 
 /**
  * Пример
@@ -32,8 +36,7 @@ fun alignFile(inputName: String, lineLength: Int, outputName: String) {
                 if (word.length + currentLineLength >= lineLength) {
                     outputStream.newLine()
                     currentLineLength = 0
-                }
-                else {
+                } else {
                     outputStream.write(" ")
                     currentLineLength++
                 }
@@ -243,15 +246,15 @@ Suspendisse ~~et elit in enim tempus iaculis~~.
  *
  * Соответствующий выходной файл:
 <html>
-    <body>
-        <p>
-            Lorem ipsum <i>dolor sit amet</i>, consectetur <b>adipiscing</b> elit.
-            Vestibulum lobortis. <s>Est vehicula rutrum <i>suscipit</i></s>, ipsum <s>lib</s>ero <i>placerat <b>tortor</b></i>.
-        </p>
-        <p>
-            Suspendisse <s>et elit in enim tempus iaculis</s>.
-        </p>
-    </body>
+<body>
+<p>
+Lorem ipsum <i>dolor sit amet</i>, consectetur <b>adipiscing</b> elit.
+Vestibulum lobortis. <s>Est vehicula rutrum <i>suscipit</i></s>, ipsum <s>lib</s>ero <i>placerat <b>tortor</b></i>.
+</p>
+<p>
+Suspendisse <s>et elit in enim tempus iaculis</s>.
+</p>
+</body>
 </html>
  *
  * (Отступы и переносы строк в примере добавлены для наглядности, при решении задачи их реализовывать не обязательно)
@@ -294,67 +297,67 @@ fun markdownToHtmlSimple(inputName: String, outputName: String) {
  *
  * Пример входного файла:
 ///////////////////////////////начало файла/////////////////////////////////////////////////////////////////////////////
-* Утка по-пекински
-    * Утка
-    * Соус
-* Салат Оливье
-    1. Мясо
-        * Или колбаса
-    2. Майонез
-    3. Картофель
-    4. Что-то там ещё
-* Помидоры
-* Фрукты
-    1. Бананы
-    23. Яблоки
-        1. Красные
-        2. Зелёные
+ * Утка по-пекински
+ * Утка
+ * Соус
+ * Салат Оливье
+1. Мясо
+ * Или колбаса
+2. Майонез
+3. Картофель
+4. Что-то там ещё
+ * Помидоры
+ * Фрукты
+1. Бананы
+23. Яблоки
+1. Красные
+2. Зелёные
 ///////////////////////////////конец файла//////////////////////////////////////////////////////////////////////////////
  *
  *
  * Соответствующий выходной файл:
 ///////////////////////////////начало файла/////////////////////////////////////////////////////////////////////////////
 <html>
-  <body>
-    <ul>
-      <li>
-        Утка по-пекински
-        <ul>
-          <li>Утка</li>
-          <li>Соус</li>
-        </ul>
-      </li>
-      <li>
-        Салат Оливье
-        <ol>
-          <li>Мясо
-            <ul>
-              <li>
-                  Или колбаса
-              </li>
-            </ul>
-          </li>
-          <li>Майонез</li>
-          <li>Картофель</li>
-          <li>Что-то там ещё</li>
-        </ol>
-      </li>
-      <li>Помидоры</li>
-      <li>
-        Фрукты
-        <ol>
-          <li>Бананы</li>
-          <li>
-            Яблоки
-            <ol>
-              <li>Красные</li>
-              <li>Зелёные</li>
-            </ol>
-          </li>
-        </ol>
-      </li>
-    </ul>
-  </body>
+<body>
+<ul>
+<li>
+Утка по-пекински
+<ul>
+<li>Утка</li>
+<li>Соус</li>
+</ul>
+</li>
+<li>
+Салат Оливье
+<ol>
+<li>Мясо
+<ul>
+<li>
+Или колбаса
+</li>
+</ul>
+</li>
+<li>Майонез</li>
+<li>Картофель</li>
+<li>Что-то там ещё</li>
+</ol>
+</li>
+<li>Помидоры</li>
+<li>
+Фрукты
+<ol>
+<li>Бананы</li>
+<li>
+Яблоки
+<ol>
+<li>Красные</li>
+<li>Зелёные</li>
+</ol>
+</li>
+</ol>
+</li>
+</ul>
+</body>
 </html>
 ///////////////////////////////конец файла//////////////////////////////////////////////////////////////////////////////
  * (Отступы и переносы строк в примере добавлены для наглядности, при решении задачи их реализовывать не обязательно)
@@ -381,23 +384,23 @@ fun markdownToHtml(inputName: String, outputName: String) {
  * Вывести в выходной файл процесс умножения столбиком числа lhv (> 0) на число rhv (> 0).
  *
  * Пример (для lhv == 19935, rhv == 111):
-   19935
-*    111
+19935
+ *    111
 --------
-   19935
+19935
 + 19935
 +19935
 --------
- 2212785
+2212785
  * Используемые пробелы, отступы и дефисы должны в точности соответствовать примеру.
  * Нули в множителе обрабатывать так же, как и остальные цифры:
-  235
-*  10
+235
+ *  10
 -----
-    0
+0
 +235
 -----
- 2350
+2350
  *
  */
 fun printMultiplicationProcess(lhv: Int, rhv: Int, outputName: String) {
@@ -411,21 +414,418 @@ fun printMultiplicationProcess(lhv: Int, rhv: Int, outputName: String) {
  * Вывести в выходной файл процесс деления столбиком числа lhv (> 0) на число rhv (> 0).
  *
  * Пример (для lhv == 19935, rhv == 22):
-  19935 | 22
- -198     906
- ----
-    13
-    -0
-    --
-    135
-   -132
-   ----
-      3
+19935 | 22                //пробел lhv пробел / пробел rhv
+-198     906               //минус +  длина остатка + кол-во пробелов до конца lhv пробел / пробел результат
+----                       //минус + длина cS
+13
+-0
+--
+135
+-132
+----
+3
 
  * Используемые пробелы, отступы и дефисы должны в точности соответствовать примеру.
  *
  */
 fun printDivisionProcess(lhv: Int, rhv: Int, outputName: String) {
-    TODO()
+    File(outputName).bufferedWriter().use {
+        var lengthLhv = lhv.toString().length
+        var result = 0
+        var resultForPrint = lhv / rhv
+        var curDividend = 0
+        var spaceCount = 1 // потому что по умолчанию для минуса есть пробел
+        var prevOffsetDivident = 1
+        var counter = 0
+        var nextNum = 0
+        var curDividendForPrint: String = ""
+        //var curSubstrForPrint: String = "-0"
+        var offsetSpacers = 0
+        var prevDividendForPrint = targetNum(1, lhv).toString()
+        var prevDividendForPrintLength = 1
+        //var iteration = 0
+        //println(" $lhv | $rhv")
+        //it.write(" $lhv | $rhv\n")
+        loop@ for (i in 1..lengthLhv) {
+
+            var curRank = 10.toDouble().pow(lengthLhv - i).toInt()
+            var curNum = targetNum(i, lhv)
+            if (i != lengthLhv) nextNum = targetNum(i + 1, lhv)
+            curDividend = curDividend * 10 + curNum
+            var curDivideRes = curDividend / rhv
+            var curSubstr = curDivideRes * rhv
+            var curSubstrForPrint = "-$curSubstr"
+            curDividend -= curSubstr
+            if (i != lengthLhv) curDividendForPrint = curDividend.toString() + nextNum.toString()
+            else curDividendForPrint = curDividend.toString()
+
+
+
+            //if (curDivideRes == 0) curDividendForPrint = "0$curDividendForPrint"
+           // else curDividendForPrint = "$curDividendForPrint"
+            result += curDivideRes * curRank
+
+            var offsetDivident = i - curDividend.toString().length + spaceCount
+            //if (curDivideRes != 0 || lhv < rhv) offsetDivident += 1
+            //if (i == lengthLhv) offsetDivident -=1
+
+            //var offsetSubstr = prevDividendForPrintLength - curSubstrForPrint.length + offsetDivident - 1
+            var offsetSubstr = if (prevDividendForPrintLength >= curSubstrForPrint.length) prevOffsetDivident + prevDividendForPrintLength - curSubstrForPrint.length
+            else {
+                prevOffsetDivident + prevDividendForPrintLength - curSubstrForPrint.length
+            }
+
+            offsetSpacers = if (prevDividendForPrintLength >= curSubstrForPrint.length) {
+                prevOffsetDivident
+            } else {
+                offsetSubstr
+            }
+
+            var spacersCount = 0
+
+            if (false || result != 0 /*|| lhv < rhv*/) {
+                counter++
+
+                if (counter == 1) {
+                    if (prevDividendForPrintLength >= curSubstrForPrint.length){
+                        spaceCount = 0
+                        prevOffsetDivident = 0
+                        offsetSubstr = prevOffsetDivident + prevDividendForPrintLength - curSubstrForPrint.length
+                        offsetSpacers = prevOffsetDivident
+                        offsetDivident = i - curDividend.toString().length + spaceCount
+
+                    }
+                    for (j in 1..prevOffsetDivident) {
+                        print(' ')
+                        it.write(" ")
+                    }
+                    println("$lhv | $rhv")
+                    it.write("$lhv | $rhv\n")
+                    for (j in 1..offsetSubstr) {
+                        print(' ')
+                        it.write(" ")
+                    }
+                    print("$curSubstrForPrint")
+                    it.write("$curSubstrForPrint")
+                    for (j in 1..lengthLhv - i + 3) {
+                        print(' ')
+                        it.write(" ")
+                    }
+                    print("$resultForPrint\n")
+                    it.write("$resultForPrint\n")
+                    for (z in 1..offsetSpacers) {
+                        print(' ')
+                        it.write(" ")
+
+                    }
+                } else {
+                    for (j in 1..offsetSubstr) {
+                        print(' ')
+                        it.write(" ")
+                    }
+                    print("$curSubstrForPrint\n")
+                    it.write("$curSubstrForPrint\n")
+
+
+                    for (z in 1..offsetSpacers) {
+                        print(' ')
+                        it.write(" ")
+                    }
+                }
+
+                if (prevDividendForPrintLength >= curSubstrForPrint.length) {
+                    spacersCount = prevDividendForPrintLength
+                } else spacersCount = curSubstrForPrint.length
+
+                for (j in 1..spacersCount) {
+                    if (j == spacersCount) {
+                        print("-\n")
+                        it.write("-\n")
+                    } else {
+                        print('-')
+                        it.write("-")
+                    }
+
+                }
+
+
+                if (true) {
+                    for (j in 1..offsetDivident) {
+                        print(' ')
+                        it.write(" ")
+                    }
+                    print("$curDividendForPrint\n")
+                    it.write("$curDividendForPrint\n")
+                }
+
+
+            } else if (lhv < rhv && i == lengthLhv) {
+                if (prevDividendForPrintLength >= curSubstrForPrint.length){
+                    spaceCount = 0
+                    prevOffsetDivident = 0
+                    offsetSubstr = prevOffsetDivident + prevDividendForPrintLength - curSubstrForPrint.length
+                    offsetSpacers = prevOffsetDivident
+                    offsetDivident = i - curDividend.toString().length + spaceCount
+
+
+
+                }
+                for (j in 1..prevOffsetDivident) {
+                    print(' ')
+                    it.write(" ")
+                }
+                println("$lhv | $rhv")
+                it.write("$lhv | $rhv\n")
+
+
+
+                offsetSubstr = offsetDivident - curSubstrForPrint.length + 1
+                if (lhv<rhv) offsetSubstr = prevOffsetDivident + lengthLhv - curSubstrForPrint.length
+                offsetSpacers = if(prevDividendForPrintLength >= curSubstrForPrint.length) prevOffsetDivident
+                else{
+                    offsetSubstr
+                }
+                for (j in 1..offsetSubstr) {
+                    print(' ')
+                    it.write(" ")
+                }
+                print("$curSubstrForPrint")
+                it.write("$curSubstrForPrint")
+                for (j in 1..lengthLhv - i + 3) {
+                    print(' ')
+                    it.write(" ")
+                }
+                print("$resultForPrint\n")
+                it.write("$resultForPrint\n")
+
+
+                for (z in 1..offsetSpacers) {
+                    print(' ')
+                    it.write(" ")
+
+                }
+                spacersCount = if (curDividendForPrint.length >= curSubstrForPrint.length) {
+                    curDividendForPrint.length
+                    //offsetSpacers-=1
+                } else curDividendForPrint.length + 1
+
+                for (j in 1..spacersCount) {
+                    if (j == spacersCount) {
+                        print("-\n")
+                        it.write("-\n")
+                    } else {
+                        print('-')
+                        it.write("-")
+                    }
+                }
+                if (offsetSubstr == -1) offsetSubstr = 0
+                for (j in 1..offsetSubstr + curSubstrForPrint.length - curDividend.toString().length) {
+                    print(' ')
+                    it.write(" ")
+
+                }
+                print("$curDividend\n")
+                it.write("$curDividend\n")
+                break@loop
+            }
+            prevDividendForPrint = curDividendForPrint
+            prevDividendForPrintLength = curDividendForPrint.length
+            prevOffsetDivident = offsetDivident
+        }
+        // println("$result");
+
+    }
 }
+
+
+/*
+fun printDivisionProcess(lhv: Int, rhv: Int, outputName: String) {
+    File(outputName).bufferedWriter().use {
+        var lengthLhv = lhv.toString().length
+        var result = 0
+        var resultForPrint = lhv / rhv
+        var curDividend = 0
+        var spaceCount = 0
+        var counter = 0
+        var zeroFlag = false
+        //var curSubstrForPrint: String = "-0"
+        var offsetSpacers = 0
+        //var iteration = 0
+        println(" $lhv | $rhv")
+        it.write(" $lhv | $rhv\n")
+        loop@ for (i in 1..lengthLhv) {
+
+            var curRank = 10.toDouble().pow(lengthLhv - i).toInt()
+            var curNum = targetNum(i, lhv)
+            curDividend = curDividend * 10 + curNum
+            var curDividendForPrint = curDividend.toString()
+            var curDivideRes = curDividend / rhv
+            var curSubstr = curDivideRes * rhv
+            var curSubstrForPrint = "-$curSubstr"
+            curDividend -= curSubstr
+            //if (curDividend == 0) curDividendForPrint = "0$curDividendForPrint"\
+            if (zeroFlag) curDividendForPrint = "0$curDividendForPrint"
+            zeroFlag = false
+            result += curDivideRes * curRank
+
+
+            var offsetDivident = spaceCount
+            //if (curDivideRes != 0) spaceCount = i
+            if (curDivideRes != 0 || lhv < rhv) spaceCount = i - (curDividend.toString().length-1)
+            var offsetSubstr = curDividendForPrint.length - curSubstrForPrint.length + offsetDivident
+
+            if (curDividendForPrint.length >= curSubstrForPrint.length) {
+                offsetSpacers = offsetDivident
+            } else {
+                offsetSpacers = offsetSubstr //+ lNum(curDividendForPrint)
+            }
+
+            var spacersCount = 0
+
+            if (result != 0 /*|| lhv < rhv*/) {
+                counter++
+                if (counter > 1) {
+                    for (j in 1..offsetDivident) {
+                        print(' ')
+                        it.write(" ")
+                    }
+                    print("$curDividendForPrint\n")
+                    it.write("$curDividendForPrint\n")
+                }
+
+                if (counter == 1) {
+                    print("$curSubstrForPrint")
+                    it.write("$curSubstrForPrint")
+                    for (j in 1..lengthLhv - i + 3) {
+                        print(' ')
+                        it.write(" ")
+
+                    }
+                    print("$resultForPrint\n")
+                    it.write("$resultForPrint\n")
+
+
+                    for (z in 1..offsetSpacers) {
+                        print(' ')
+                        it.write(" ")
+
+                    }
+                } else {
+                    for (j in 1..offsetSubstr) {
+                        print(' ')
+                        it.write(" ")
+                    }
+                    print("$curSubstrForPrint\n")
+                    it.write("$curSubstrForPrint\n")
+
+                    for (z in 1..offsetSpacers) {
+                        print(' ')
+                        it.write(" ")
+                    }
+                }
+
+                if (curDividendForPrint.length >= curSubstrForPrint.length) {
+                    spacersCount = curDividendForPrint.length
+                    //offsetSpacers = offsetDivident
+                } else spacersCount = curDividendForPrint.length + 1
+
+                for (j in 1..spacersCount) {
+                    if (j == spacersCount) {
+                        print("-\n")
+                        it.write("-\n")
+                    } else {
+                        print('-')
+                        it.write("-")
+                    }
+
+                }
+
+                if (i == lengthLhv) {
+                    if (offsetSubstr == -1) offsetSubstr = 0
+                    for (j in 1..offsetSubstr + curSubstrForPrint.length - curDividend.toString().length) {
+                        print(' ')
+                        it.write(" ")
+
+                    }
+                    print("$curDividend\n")
+                    it.write("$curDividend\n")
+                }
+
+            }
+            else if (lhv < rhv && i == lengthLhv){
+
+                for (j in 1..offsetSubstr) {
+                    print(' ')
+                    it.write(" ")
+                }
+                print("$curSubstrForPrint")
+                it.write("$curSubstrForPrint")
+                for (j in 1..lengthLhv - i + 3) {
+                    print(' ')
+                    it.write(" ")
+
+                }
+                print("$resultForPrint\n")
+                it.write("$resultForPrint\n")
+
+
+                for (z in 1..offsetSpacers) {
+                    print(' ')
+                    it.write(" ")
+
+                }
+                if (curDividendForPrint.length >= curSubstrForPrint.length) {
+                    spacersCount = curDividendForPrint.length
+                    //offsetSpacers-=1
+                } else spacersCount = curDividendForPrint.length + 1
+
+                for (j in 1..spacersCount) {
+                    if (j == spacersCount) {
+                        print("-\n")
+                        it.write("-\n")
+                    } else {
+                        print('-')
+                        it.write("-")
+                    }
+                }
+                if (offsetSubstr == -1) offsetSubstr = 0
+                for (j in 1..offsetSubstr + curSubstrForPrint.length - curDividend.toString().length) {
+                    print(' ')
+                    it.write(" ")
+
+                }
+                print("$curDividend\n")
+                it.write("$curDividend\n")
+                break@loop
+            }
+
+
+            if (curDividend == 0){
+                zeroFlag = true
+            }
+        }
+        // println("$result");
+
+    }
+}
+*/
+
+fun targetNum(target: Int, n: Int): Int {
+    var l = 0
+    var p = 0
+    l = lNum(n)
+    p = l - target
+    return (n / 10.toDouble().pow(p).toInt() - n / 10.toDouble().pow(p + 1).toInt() * 10)
+}
+
+fun lNum(n: Int): Int {
+    var newN = n
+    var result = 0
+    do {
+        newN /= 10
+        result++
+    } while (newN != 0)
+    return result
+}
+
 
